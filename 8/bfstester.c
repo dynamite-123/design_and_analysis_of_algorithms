@@ -24,7 +24,6 @@ void bfs(int n, int node) {
                 isCyclic = 1;
         }
     }
-
 }
 
 
