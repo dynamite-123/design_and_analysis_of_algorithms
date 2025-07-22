@@ -2,25 +2,31 @@
 #include <stdlib.h>
 
 
+int graph[100][100], visited[100], isCyclic = 0;
+int bfscount = 0;
 
-int graph[100][100], visited[100], isCyclic = 0, dfscount = 0;
 
-void dfs(int n, int node) {
-    printf("--> %c ", node + 65);
-    dfscount++;
+void bfs(int n, int node) {
+    int q[100], front = 0, rear = 0;
 
-    visited[node] = 1; //visiting 
-    for (int i = 0; i < n; i++) {
-        if (graph[node][i]) {
-            if (visited[i] == 1) {
+    q[rear++] = node;
+    
+    while (rear > front) {
+        int cur = q[front++];
+        bfscount++;
+        visited[cur] = 1;
+        printf("--> %c ", cur + 65);
+
+        for (int i=0; i<n; i++) {
+            if (graph[cur][i] == 1 && visited[i] == 0)
+                q[rear++] = i;
+            if (graph[cur][i] == 1 && visited[i] == 1)
                 isCyclic = 1;
-            } else if (visited[i] == 0) {
-                dfs(n, i);
-            }
         }
     }
-    visited[node] = 2; //visited
+
 }
+
 
 int main() {
     
@@ -37,14 +43,14 @@ int main() {
         visited[i] = 0;
     }
 
-    dfs(n, 0);
+    bfs(n, 0);
     printf("\n");
 
-    int connected = (n == dfscount)? 1: 0;
+    int connected = (n == bfscount)? 1: 0;
 
     for (int i=1; i<n; i++) {
         if (visited[i] == 0) {
-            dfs(n, i);
+            bfs(n, i);
         }
         printf("\n");
     }
